@@ -129,6 +129,7 @@ func MonitorConnections(conn net.Conn) {
 	
 		fmt.Println("Message Received: " + string(buffer[:len(buffer) - 1]))
 		// Packethandling logic
+		// packet := Network.CreatePacket(0xff, 10)
 	}
 }
 

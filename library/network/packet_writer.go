@@ -41,7 +41,7 @@ func (pl *PacketWriterPool) Pop() *PacketWriter{
 var pool = PacketWriterPool{pool: []*PacketWriter{}}
 
 // PacketWriter ==========================================
-func CreateInstance(capacity int) *PacketWriter {
+func CreatePacketWriterInstance(capacity int) *PacketWriter {
 	pool.Lock()
 	var pw = pool.Pop()
 
@@ -68,22 +68,19 @@ func (pw *PacketWriter) WriteBool(value bool) {
 	pw.stream <- append(buffer, byte(intValue))
 }
 
+func (pw *PacketWriter) WriteInt(v int) {
+	pw.stream <- make([]byte, v)
+}
+
+func (pw *PacketWriter) WriteString(s string) {
+	pw.stream <- []byte(s)
+}
+
 func (pw *PacketWriter) WriteOneByte(b byte) {
-	buffer := make([]byte, 1)
-	pw.stream <- append(buffer, b)
+	pw.stream <- make([]byte, b)
 }
 
-func (pw *PacketWriter) WriteUint(value uint) {
-	buffer := make([]byte, 1)
-	pw.stream <- append(buffer, byte(value))
-}
-
-func (pw *PacketWriter) WriteInt(value int) {
-	buffer := make([]byte, 1)
-	pw.stream <- append(buffer, byte(value))
-}
-
-func (pw *PacketWriter) WriteSequence(bytes []byte) {
-	pw.stream <- bytes
+func (pw *PacketWriter) WriteRaw(b []byte) {
+	pw.stream <- b
 }
 
